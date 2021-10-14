@@ -7,9 +7,6 @@ resource "aws_eip" "my_static_ip" {
 }
 module "ec2_module" {
   source = "terraform-aws-modules/ec2-instance/aws"
-
-  instance_count = 1
-
   name          = "done-with-ec2_module"
   ami           = "ami-0453cb7b5f2b7fca2"
   instance_type = local.dict_of_instance_types[var.kvazi_workspace]
