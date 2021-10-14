@@ -1,49 +1,62 @@
 provider "aws" {
-    region = "us-east-2"
+  region = "eu-central-1"
 }
 
-data "aws_ami" "ubuntu" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
+resource "aws_eip" "my_static_ip" {
+  instance = aws_instance.web_server.id
 }
 
-locals {
-  dict_of_instance_types = {
-    stage = "t2.micro"
-    prod = "t2.small"
-  }
-}
+resource "aws_instance" "web_server" {
+  ami               = "ami-0453cb7b5f2b7fca2" #Amazon
+  instance_type     = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.webserver.id]
+  user_data = templatefile("user.sh", {
+    f_name = "urli"
+    l_name = "by"
+    names = ["vasya", "kolya", "masha", "katya"]
+  })
 
-locals {
-  dict_of_instance_count = {
-    stage = 1
-    prod = 2
+  tags = {
+    Name = "webServer"
+    Owner = "urli_by"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
-data "aws_caller_identity" "current" {}
+resource "aws_security_group" "webserver" {
+  name        = "webserver security group"
+  description = "My first security group"
 
-data "aws_region" "current" {}
 
-data "instance_ip_addr" "current" {}
+  ingress  {
+      description      = "80 from VPC"
+      from_port        = 80
+      to_port          = 80
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+    }
+  ingress  {
+      description      = "443 from VPC"
+      from_port        = 443
+      to_port          = 443
+      protocol         = "tcp"
+      cidr_blocks      = ["0.0.0.0/0"]
+    }
 
-data "private_ip" "current" {}
+  egress  {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
 
-data "aws_vpc" "default" {
-  default = true
+  tags = {
+    Name = "allow_tls"
+  }
+
 }
 
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.default.id
-}
