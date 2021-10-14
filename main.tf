@@ -9,7 +9,7 @@ module "ec2_module" {
   source = "terraform-aws-modules/ec2-instance/aws"
   name          = "done-with-ec2_module"
   ami           = "ami-0453cb7b5f2b7fca2"
-  instance_type = local.dict_of_instance_types[var.kvazi_workspace]
+  instance_type = "t2.micro"
 }
 #resource "aws_instance" "web_server" {
 #  ami               = "ami-0453cb7b5f2b7fca2" #Amazon
