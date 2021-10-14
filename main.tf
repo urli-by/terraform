@@ -29,10 +29,10 @@ module "ec2_module" {
 #    Owner = "urli_by"
 #  }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#  lifecycle {
+#    create_before_destroy = true
+#  }
+#}
 
 resource "aws_security_group" "webserver" {
   name        = "webserver security group"
