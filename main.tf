@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_eip" "my_static_ip" {
-  instance = aws_instance.web_server.id
+  instance = aws_instance.done-with-ec2_module.id
 }
 module "ec2_module" {
   source = "terraform-aws-modules/ec2-instance/aws"
