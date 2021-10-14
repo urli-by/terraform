@@ -5,21 +5,29 @@ provider "aws" {
 resource "aws_eip" "my_static_ip" {
   instance = aws_instance.web_server.id
 }
+module "ec2_module" {
+  source = "terraform-aws-modules/ec2-instance/aws"
 
-resource "aws_instance" "web_server" {
-  ami               = "ami-0453cb7b5f2b7fca2" #Amazon
-  instance_type     = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.webserver.id]
-  user_data = templatefile("user.sh", {
-    f_name = "urli"
-    l_name = "by"
-    names = ["vasya", "kolya", "masha", "katya"]
-  })
+  instance_count = 1
 
-  tags = {
-    Name = "webServer"
-    Owner = "urli_by"
-  }
+  name          = "done-with-ec2_module"
+  ami           = "ami-0453cb7b5f2b7fca2"
+  instance_type = local.dict_of_instance_types[var.kvazi_workspace]
+}
+#resource "aws_instance" "web_server" {
+#  ami               = "ami-0453cb7b5f2b7fca2" #Amazon
+#  instance_type     = "t2.micro"
+#  vpc_security_group_ids = [aws_security_group.webserver.id]
+#  user_data = templatefile("user.sh", {
+#    f_name = "urli"
+#    l_name = "by"
+#    names = ["vasya", "kolya", "masha", "katya"]
+#  })
+#
+#  tags = {
+#    Name = "webServer"
+#    Owner = "urli_by"
+#  }
 
   lifecycle {
     create_before_destroy = true
