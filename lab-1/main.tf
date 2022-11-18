@@ -15,7 +15,7 @@ resource "aws_instance" "My_first_inst" {
 resource "aws_instance" "My_second_inst" {
     ami = "ami-01cae1550c0adea9c"
     instance_type = "t2.micro"
-
+    key_name = "urli_terraform_key_18_11_2022"
     tags = {
         learn = "terraform"
         lab = "1"
