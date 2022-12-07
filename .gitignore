@@ -43,5 +43,6 @@ secret
 urli_terraform_key_18_11_2022.ppk
 .terraform.lock.hcl
 urli-terraform-ssh.pem
+terraform.log
 
 # End of https://www.toptal.com/developers/gitignore/api/terraform
