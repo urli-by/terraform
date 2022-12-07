@@ -10,7 +10,7 @@ provider "aws" {
 
 resource "aws_default_vpc" "default" {}
 
-resource "aws_instance" "myserver" {
+resource "aws_instance" "myWEBserver" {
   ami = "ami-01cae1550c0adea9c"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
